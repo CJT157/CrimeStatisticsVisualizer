@@ -22,10 +22,32 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.post('/', (req, res) => {
+app.get('/', (req, res) => {
     res.json({'success': 'Hello, World!'})
+    performQuery(req.body).then(result => res.json(result));
 });
 
+const performQuery = async (attr) => {
+    const bigquery = new BigQuery();
+
+    let query = 
+    `SELECT primary_type, ST_GeogPoint(longitude, latitude)
+    AS point
+    FROM \`project-334322.crimeset.crime\` 
+    WHERE longitude IS NOT NULL`
+
+    console.log(query);
+
+    const options = { query: query };
+
+    return bigquery.query(options)
+    .then(results => {
+        console.log('query done');
+        console.log(results[0])
+        return { results: results[0] }
+    })
+    .catch(err => console.error(err));
+}
 
 app.listen(PORT, () => {
     console.log(`API Listening on port ${PORT}`)
