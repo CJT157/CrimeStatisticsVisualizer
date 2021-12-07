@@ -15,9 +15,12 @@ function App() {
     'CRIMINAL TRESPASS': '#851d41'
   }
 
-  const mapStyles = {        
-    height: "100vh",
-    width: "100%"};
+  const mapContainerStyles = {        
+    height: "100%",
+    width: "100%",
+    borderRadius: "7px",
+    boxShadow: "2px 2px 7px rgba(0, 0, 0, 0.7)"
+  };
 
   const circleStyles = {
     strokeColor: "#FF0000"
@@ -42,18 +45,44 @@ function App() {
     setLocations(temp);
   }
 
+  const mapStyles =  [
+    {
+        featureType: "poi",
+        elementType: "geometry",
+        stylers: [
+            {
+                color: "#eeeeee",
+            },
+        ],
+    },
+    {
+        featureType: "poi",
+        elementType: "labels.text",
+        stylers: [
+            {
+                visibility: "off",
+            },
+        ],
+    }
+];
+
   return (
-    <div>
-      <LoadScript
-       googleMapsApiKey='AIzaSyC35r6BaiVXyUN4B45pFIwedN1_J7O5NWg'>
-        <GoogleMap
-          mapContainerStyle={mapStyles}
-          zoom={13}
-          center={{lat: 41.874, lng: -87.718}}
-          clickableIcons={false}
-          onClick={(e) => updateBox(e.latLng)}
-          mapTypeId={"roadmap"}
-        >
+    <div id="page_container">
+      <div id="title_container">
+        Title
+      </div>
+      <div id="map_container">
+        <LoadScript
+        googleMapsApiKey='AIzaSyC35r6BaiVXyUN4B45pFIwedN1_J7O5NWg'>
+          <GoogleMap
+            mapContainerStyle={mapContainerStyles}
+            zoom={13}
+            center={{lat: 41.874, lng: -87.718}}
+            clickableIcons={false}
+            onClick={(e) => updateBox(e.latLng)}
+            mapTypeId={"roadmap"}
+            options={{styles: mapStyles}}
+          >
         {
           locations.map(item => {
             return (
@@ -90,8 +119,20 @@ function App() {
           :
           undefined
         }
-        </GoogleMap>
-     </LoadScript>
+          </GoogleMap>
+      </LoadScript>
+      </div>
+      <div id="info_panel">
+        <div id="header">
+          <h3>Crimes</h3>
+        </div>
+        <div id="contents">
+            {crimes.length === 0 
+            ? <p className="empty">No area / crimes selected yet! <br /><br /> Choose 2 points on the map to get started.</p>
+            : undefined
+            }
+        </div>
+      </div>
     </div>
   );
 }
