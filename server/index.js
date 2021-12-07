@@ -22,7 +22,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.post('/', (req, res) => {
+app.post('/query', (req, res) => {
     performQuery(req.body).then(result => res.json(result));
 });
 
