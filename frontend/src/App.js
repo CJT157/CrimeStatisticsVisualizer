@@ -44,6 +44,9 @@ function App() {
       temp = []
     } 
     temp.push({name: latLng.lat(), location: {lat: latLng.lat(), lng: latLng.lng()}})
+
+    // TODO: Add logic to correctly arrange longitude and latitude values
+
     if (temp.length === 2) {
       setLoading(true);
       fetch(`http://localhost:3001/`, {method: "POST", headers: {'content-type': 'application/json'}, body: JSON.stringify(temp)})
