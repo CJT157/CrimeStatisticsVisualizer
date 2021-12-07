@@ -50,7 +50,6 @@ function App() {
         .then(response => response.json())
         .then(data => {
           setCrimes(data.results)
-          console.log(data.results);
           setLoading(false);
         })
     }

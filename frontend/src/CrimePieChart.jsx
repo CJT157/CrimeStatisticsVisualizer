@@ -35,8 +35,6 @@ export function CrimePieChart({crimeData}) {
             chartData[crimeType]++;
         }
 
-        console.log(chartData);
-
         setData({
             labels: ['Violent', 'Theft', 'Other'],
             datasets: [
