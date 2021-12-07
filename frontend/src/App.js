@@ -20,8 +20,6 @@ function App() {
   const [center, setCenter] = useState({lat: 41.874, lng: -87.718})
   const [loading, setLoading] = useState(false);
 
-  // AIzaSyC35r6BaiVXyUN4B45pFIwedN1_J7O5NWg
-
   let crime_color = {'HOMICIDE': '#FF0000', 'CRIMINAL SEXUAL ASSAULT': '#FFFF00', 'ROBBERY': '#fcd703',
     'BATTERY': '#94fc03', 'ASSAULT': '#03fc03', 'THEFT': '#03fc8c', 'DECPTIVE PRACTICE': '#03dffc', 'WEAPONS VIOLATION': '#0356fc',
     'NARCOTICS': '#2500c9', 'INTERFERENCE WITH PUBLIC OFFICER': '#a65cfa', 'OTHER OFFENSE': '#7700ff', 'PUBLIC PEACE VIOLATION': '#c300ff', 
@@ -112,7 +110,7 @@ function App() {
           })
         }
         {
-          crimes.length !== 0 ?
+          crimes.length !== 0 && !loading && locations.length === 2 ?
             crimes.map(crime => {
               return (
                 <Circle
