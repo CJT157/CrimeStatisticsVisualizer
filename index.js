@@ -29,18 +29,12 @@ app.post('/', (req, res) => {
 const performQuery = async (attr) => {
     const bigquery = new BigQuery();
 
-    console.log(attr);
-
     let query = 
-    `SELECT primary_type, ST_GeogPoint(longitude, latitude)
-    AS point
+    `SELECT primary_type, longitude, latitude
     FROM \`project-334322.chicago_crime_set.crime_set\` 
     WHERE latitude IS NOT NULL 
     AND longitude >= ${attr[0].location.lng} AND latitude >= ${attr[1].location.lat}
-    AND longitude <= ${attr[1].location.lng} AND latitude <= ${attr[0].location.lat}
-    LIMIT 50`
-
-    console.log(query);
+    AND longitude <= ${attr[1].location.lng} AND latitude <= ${attr[0].location.lat}`
 
     const options = { query: query };
 
