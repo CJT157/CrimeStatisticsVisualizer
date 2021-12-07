@@ -1,12 +1,24 @@
 import React, { useRef, useState } from "react";
 import { GoogleMap, LoadScript, Marker, Rectangle, Circle } from '@react-google-maps/api';
 import './App.css';
+import { CrimePieChart } from "./CrimePieChart";
+
+const LoadingIcon = () => {
+  return (
+      <svg width="200px" height="200px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+          <path fill="none" stroke="#2BFF88" strokeWidth="8" strokeDasharray="42.76482137044271 42.76482137044271" d="M24.3 30C11.4 30 5 43.3 5 50s6.4 20 19.3 20c19.3 0 32.1-40 51.4-40 C88.6 30 95 43.3 95 50s-6.4 20-19.3 20C56.4 70 43.6 30 24.3 30z" strokeLinecap="round">
+              <animate attributeName="stroke-dashoffset" repeatCount="indefinite" dur="1s" keyTimes="0;1" values="0;256.58892822265625"></animate>
+          </path>
+      </svg>
+  );
+}
 
 function App() {
   const mapRef = useRef(undefined);
   const [locations, setLocations] = useState([])
   const [crimes, setCrimes] = useState([])
   const [center, setCenter] = useState({lat: 41.874, lng: -87.718})
+  const [loading, setLoading] = useState(false);
 
   // AIzaSyC35r6BaiVXyUN4B45pFIwedN1_J7O5NWg
 
@@ -35,11 +47,13 @@ function App() {
     } 
     temp.push({name: latLng.lat(), location: {lat: latLng.lat(), lng: latLng.lng()}})
     if (temp.length === 2) {
+      setLoading(true);
       fetch(`http://localhost:3001/`, {method: "POST", headers: {'content-type': 'application/json'}, body: JSON.stringify(temp)})
         .then(response => response.json())
         .then(data => {
           setCrimes(data.results)
-          console.log(data.results)
+          console.log(data.results);
+          setLoading(false);
         })
     }
 
@@ -70,7 +84,8 @@ function App() {
   return (
     <div id="page_container">
       <div id="title_container">
-        Title
+        <h1>Chicago Crime Explorer</h1>
+        <h3 id="authors">Made with ❤️ by Johnny and Colin </h3>
       </div>
       <div id="map_container">
         <LoadScript googleMapsApiKey='AIzaSyC35r6BaiVXyUN4B45pFIwedN1_J7O5NWg'>
@@ -130,12 +145,19 @@ function App() {
       </div>
       <div id="info_panel">
         <div id="header">
-          <h3>Crimes</h3>
+          <h3>Crime Analytics</h3>
         </div>
         <div id="contents">
-            {crimes.length === 0 
+            { (crimes.length === 0 && !loading)
             ? <p className="empty">No area / crimes selected yet! <br /><br /> Choose 2 points on the map to get started.</p>
-            : undefined
+            : 
+            loading
+            ? <LoadingIcon />
+            :
+            <div id="charts">
+              <h3>Total Crimes: {crimes.length}</h3>
+              <CrimePieChart crimeData={crimes}/>
+            </div>
             }
         </div>
       </div>

@@ -24,6 +24,20 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-direction: column;
+
+  font-size: 1.5rem;
+  color: #fff;
+}
+
+#title_container > h1 {
+  font-weight: 600;
+  text-shadow: 2px 2px 0px #000;
+  margin-bottom: -1rem;
+}
+
+#title_container > #authors {
+  text-shadow: 2px 2px 0px #000;
 }
 
 #map_container {
@@ -77,4 +91,18 @@
   font-size: 1.25rem;
   font-weight: 100;
   text-shadow: 2px 2px 7px rgb(0, 0, 0);
+}
+
+#charts {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 100%;
+}
+
+#charts > h3 {
+  font-size: 1.5rem;
+  text-align: center;
+  color: #fff;
+  font-weight: 100;
 }
