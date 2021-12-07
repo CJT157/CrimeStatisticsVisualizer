@@ -1,7 +1,6 @@
 #page_container {
   max-width: 100vw;
-  min-height: 93.5vh;
-  height: fit-content;
+  min-height: 100vh;
 
   display: grid;
   grid-template-areas: 
@@ -14,7 +13,7 @@
 
   font-family: 'Roboto', sans-serif;
 
-  padding: 2rem;
+  padding: 0px 2rem;
 
   overflow-x: hidden;
   overflow-y: hidden;
