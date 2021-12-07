@@ -1,18 +1,19 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { GoogleMap, LoadScript, Marker, Rectangle, Circle } from '@react-google-maps/api';
 import './App.css';
 
 function App() {
+  const mapRef = useRef(undefined);
   const [locations, setLocations] = useState([])
   const [crimes, setCrimes] = useState([])
+  const [center, setCenter] = useState({lat: 41.874, lng: -87.718})
 
   // AIzaSyC35r6BaiVXyUN4B45pFIwedN1_J7O5NWg
 
   let crime_color = {'HOMICIDE': '#FF0000', 'CRIMINAL SEXUAL ASSAULT': '#FFFF00', 'ROBBERY': '#fcd703',
     'BATTERY': '#94fc03', 'ASSAULT': '#03fc03', 'THEFT': '#03fc8c', 'DECPTIVE PRACTICE': '#03dffc', 'WEAPONS VIOLATION': '#0356fc',
     'NARCOTICS': '#2500c9', 'INTERFERENCE WITH PUBLIC OFFICER': '#a65cfa', 'OTHER OFFENSE': '#7700ff', 'PUBLIC PEACE VIOLATION': '#c300ff', 
-    'MOTOR VEHICLE THEFT': '#f700ff', 'ARSON': '#8a008f', 'CRIMINAL DAMAGE': '#8f0064', 'CRIMINAL DAMAGE': '#ff00b2', 
-    'CRIMINAL TRESPASS': '#851d41'
+    'MOTOR VEHICLE THEFT': '#f700ff', 'ARSON': '#8a008f', 'CRIMINAL DAMAGE': '#8f0064',
   }
 
   const mapContainerStyles = {        
@@ -72,14 +73,19 @@ function App() {
         Title
       </div>
       <div id="map_container">
-        <LoadScript
-        googleMapsApiKey='AIzaSyC35r6BaiVXyUN4B45pFIwedN1_J7O5NWg'>
+        <LoadScript googleMapsApiKey='AIzaSyC35r6BaiVXyUN4B45pFIwedN1_J7O5NWg'>
           <GoogleMap
+            ref={mapRef}
             mapContainerStyle={mapContainerStyles}
             zoom={13}
-            center={{lat: 41.874, lng: -87.718}}
+            center={center}
             clickableIcons={false}
             onClick={(e) => updateBox(e.latLng)}
+            onDragEnd={() => {
+              if (mapRef.current) {
+                setCenter(mapRef.current.state.map.center)
+              }
+            }}
             mapTypeId={"roadmap"}
             options={{styles: mapStyles}}
           >
