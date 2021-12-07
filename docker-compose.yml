@@ -10,7 +10,7 @@ services:
       dockerfile: Dockerfile
       context: ./nginx
     ports:
-      - "3050:80"
+      - "5000:80"
 
   api:
     build:
