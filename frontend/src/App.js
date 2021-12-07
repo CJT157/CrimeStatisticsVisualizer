@@ -118,6 +118,7 @@ function App() {
                   mapContainerStyle={circleStyles}
                   radius={3}
                   center={{ lat: crime.latitude, lng: crime.longitude }}
+                  onClick={() => console.log(crime.primary_type)}
                 />
               )
             })
@@ -127,7 +128,7 @@ function App() {
         {
           locations.length === 2 ?
             <Rectangle
-              options={{ strokeColor: "#000000", strokeOpacity: .5, fillColor: "#000000", fillOpacity: .05 }}
+              options={{ strokeColor: "#000000", strokeOpacity: .5, fillColor: "#000000", fillOpacity: .00 }}
               bounds={
               {north: locations[0].location.lat,
                 south: locations[1].location.lat,

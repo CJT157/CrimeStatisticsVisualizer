@@ -44,9 +44,9 @@ export function CrimePieChart({crimeData}) {
                     label: 'Crimes',
                     data: [chartData['Violent'], chartData['Theft'], chartData['Other']],
                     backgroundColor: [
-                        'rgba(255, 99, 132, 0.5)',
-                        'rgba(0, 255, 0, 0.5)',
-                        'rgba(0, 0, 255, 0.5)',
+                        'rgb(255, 99, 132)',
+                        'rgb(0, 255, 0)',
+                        'rgb(0, 0, 255)',
                     ]
                 }
             ],
