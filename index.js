@@ -22,19 +22,23 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.get('/', (req, res) => {
-    res.json({'success': 'Hello, World!'})
+app.post('/', (req, res) => {
     performQuery(req.body).then(result => res.json(result));
 });
 
 const performQuery = async (attr) => {
     const bigquery = new BigQuery();
 
+    console.log(attr);
+
     let query = 
     `SELECT primary_type, ST_GeogPoint(longitude, latitude)
     AS point
-    FROM \`project-334322.crimeset.crime\` 
-    WHERE longitude IS NOT NULL`
+    FROM \`project-334322.chicago_crime_set.crime_set\` 
+    WHERE latitude IS NOT NULL 
+    AND longitude >= ${attr[0].location.lng} AND latitude >= ${attr[1].location.lat}
+    AND longitude <= ${attr[1].location.lng} AND latitude <= ${attr[0].location.lat}
+    LIMIT 50`
 
     console.log(query);
 
@@ -43,7 +47,6 @@ const performQuery = async (attr) => {
     return bigquery.query(options)
     .then(results => {
         console.log('query done');
-        console.log(results[0])
         return { results: results[0] }
     })
     .catch(err => console.error(err));
