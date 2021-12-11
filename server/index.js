@@ -6,6 +6,7 @@ const PORT = 3001;
 require('dotenv').config();
 const BigQuery = require('@google-cloud/bigquery');
 
+// 
 const app = express();
 app.use(bodyParser.urlencoded({
     extended: true
@@ -29,6 +30,7 @@ app.post('/query', (req, res) => {
 const performQuery = async (attr) => {
     const bigquery = new BigQuery();
 
+    // Build query to retrieve crimes within specified area
     let query = 
     `SELECT primary_type, longitude, latitude
     FROM \`project-334322.chicago_crime_set.crime_set\` 
@@ -38,6 +40,7 @@ const performQuery = async (attr) => {
 
     const options = { query: query };
 
+    // Send sql query to the backend
     return bigquery.query(options)
     .then(results => {
         console.log('query done');

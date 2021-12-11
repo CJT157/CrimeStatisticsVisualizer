@@ -20,12 +20,14 @@ function App() {
   const [center, setCenter] = useState({lat: 41.874, lng: -87.718})
   const [loading, setLoading] = useState(false);
 
+  // create dictionary to store crime hex values to color circles on the map
   let crime_color = {'HOMICIDE': '#FF0000', 'CRIMINAL SEXUAL ASSAULT': '#FFFF00', 'ROBBERY': '#fcd703',
     'BATTERY': '#94fc03', 'ASSAULT': '#03fc03', 'THEFT': '#03fc8c', 'DECPTIVE PRACTICE': '#03dffc', 'WEAPONS VIOLATION': '#0356fc',
     'NARCOTICS': '#2500c9', 'INTERFERENCE WITH PUBLIC OFFICER': '#a65cfa', 'OTHER OFFENSE': '#7700ff', 'PUBLIC PEACE VIOLATION': '#c300ff', 
     'MOTOR VEHICLE THEFT': '#f700ff', 'ARSON': '#8a008f', 'CRIMINAL DAMAGE': '#8f0064',
   }
 
+  // define map styles to overwrite the default map library styles
   const mapContainerStyles = {        
     height: "100%",
     width: "100%",
@@ -33,20 +35,25 @@ function App() {
     boxShadow: "2px 2px 7px rgba(0, 0, 0, 0.7)"
   };
 
+  // define circle styles to overwrite default
   const circleStyles = {
     strokeColor: "#FF0000"
   }
 
+  // Function to update the box based on the number of points placed
+  // Ran every time a new point is placed on the map
   const updateBox = (latLng) => {
     let temp = [...locations]
 
+    // check number of points
     if (temp.length === 2) {
+      // empty current map points array
       temp = []
     } 
+    // add new point to list to render it
     temp.push({name: latLng.lat(), location: {lat: latLng.lat(), lng: latLng.lng()}})
 
-    // TODO: Add logic to correctly arrange longitude and latitude values
-
+    // if there are now 2 points, query for crime data within the area
     if (temp.length === 2) {
       setLoading(true);
       fetch(`/api/query/`, {method: "POST", headers: {'content-type': 'application/json'}, body: JSON.stringify(temp)})
@@ -57,9 +64,11 @@ function App() {
         })
     }
 
+    // set the locations state to the new array
     setLocations(temp);
   }
 
+  // overwrite default map styles
   const mapStyles =  [
     {
         featureType: "poi",
@@ -97,6 +106,7 @@ function App() {
             clickableIcons={false}
             onClick={(e) => updateBox(e.latLng)}
             onDragEnd={() => {
+              // updates the center of the map after you finish dragging
               if (mapRef.current) {
                 setCenter(mapRef.current.state.map.center)
               }
@@ -105,6 +115,7 @@ function App() {
             options={{styles: mapStyles}}
           >
         {
+          // render user selected points on the map
           locations.map(item => {
             return (
             <Marker key={item.name} position={item.location}/>
@@ -112,6 +123,7 @@ function App() {
           })
         }
         {
+          // only load circles if there are any in the area, when the query isn't loading, and when there are only 2 locations chosen
           crimes.length !== 0 && !loading && locations.length === 2 ?
             crimes.map(crime => {
               return (
@@ -128,6 +140,7 @@ function App() {
           undefined
         }
         {
+          // only load rectangle when there are only 2 locations chosen
           locations.length === 2 ?
             <Rectangle
               options={{ strokeColor: "#000000", strokeOpacity: .5, fillColor: "#000000", fillOpacity: .00 }}
