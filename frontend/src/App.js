@@ -85,7 +85,7 @@ function App() {
         <h3 id="authors">Made with ❤️ by Johnny and Colin </h3>
       </div>
       <div id="map_container">
-        <LoadScript googleMapsApiKey='AIzaSyC35r6BaiVXyUN4B45pFIwedN1_J7O5NWg'>
+        <LoadScript googleMapsApiKey={process.env.REACT_APP_MAPS_API_KEY}>
           <GoogleMap
             ref={mapRef}
             mapContainerStyle={mapContainerStyles}
